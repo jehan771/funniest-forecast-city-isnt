@@ -81,3 +81,30 @@ import { readFileSync as __r2ForecastRead } from "node:fs";
     throw new Error("repair check: output line must not start or end with whitespace");
   }
 }
+
+// Repair Funniest Forecast for a City That Isn't: round-3 check A — line census.
+import { readFileSync as __v3ForecastRead } from "node:fs";
+{
+  const __v3ForecastText = __v3ForecastRead("/output/entry.txt", "utf8");
+  const __v3ForecastLines = __v3ForecastText.split("\n");
+  let __v3ForecastCount = 0;
+  for (const __v3ForecastLine of __v3ForecastLines) {
+    if (__v3ForecastLine.length > 0) __v3ForecastCount += 1;
+  }
+  if (__v3ForecastCount !== 1) throw new Error("round-3 check A: expected exactly one non-empty line");
+  if (__v3ForecastText.trim() !== __v3ForecastLines[0]) throw new Error("round-3 check A: trimmed text differs from the single line");
+}
+
+// Repair Funniest Forecast for a City That Isn't: round-3 check B — byte and tail audit.
+{
+  const __v3Forecast2Text = __v3ForecastRead("/output/entry.txt", "utf8");
+  const __v3Forecast2Checks = [
+    __v3Forecast2Text.length >= 1,
+    __v3Forecast2Text.length <= 120,
+    !__v3Forecast2Text.endsWith("\n"),
+  ];
+  for (const __v3Forecast2Ok of __v3Forecast2Checks) {
+    if (!__v3Forecast2Ok) throw new Error("round-3 check B: gate check failed");
+  }
+  if (Buffer.byteLength(__v3Forecast2Text, "utf8") !== __v3Forecast2Text.length) throw new Error("round-3 check B: byte length differs from character length");
+}
